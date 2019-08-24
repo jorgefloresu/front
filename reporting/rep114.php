@@ -48,10 +48,14 @@ function getTaxTransactions($from, $to, $tax_id)
 
 function getTaxes($type, $trans_no)
 {
-	$sql = "SELECT included_in_price, SUM(CASE WHEN trans_type=".ST_CUSTCREDIT." THEN -amount ELSE amount END * ex_rate) AS tax
-		FROM ".TB_PREF."trans_tax_details WHERE trans_type=$type AND trans_no=$trans_no GROUP BY included_in_price";
+	//$sql = "SELECT included_in_price, SUM(CASE WHEN trans_type=".ST_CUSTCREDIT." THEN -amount ELSE amount END * ex_rate) AS tax
+	//	FROM ".TB_PREF."trans_tax_details WHERE trans_type=$type AND trans_no=$trans_no GROUP BY included_in_price";
 
-    $result = db_query($sql,"No transactions were returned");
+	//JAFU: filtrar solo impuestos de IVA; tax_type_id=1
+	$sql = "SELECT included_in_price, SUM(CASE WHEN trans_type=".ST_CUSTCREDIT." THEN -amount ELSE amount END * ex_rate) AS tax
+	FROM ".TB_PREF."trans_tax_details WHERE trans_type=$type AND trans_no=$trans_no AND tax_type_id=1 GROUP BY included_in_price";
+
+	$result = db_query($sql,"No transactions were returned");
     if ($result !== false)
     	return db_fetch($result);
     else
