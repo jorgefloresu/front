@@ -35,7 +35,7 @@ function check_outstanding($debtorno, $from, $to)
 	$from = date2sql($from);
 	$to = date2sql($to);
 
-    $sql = "SELECT SUM(".TB_PREF."debtor_trans.ov_amount + ".TB_PREF."debtor_trans.ov_gst + ".TB_PREF."debtor_trans.ov_freight + 
+    $sql = "SELECT SUM(".TB_PREF."debtor_trans.ov_amount * (IF(type=12,-1,1)) + ".TB_PREF."debtor_trans.ov_gst + ".TB_PREF."debtor_trans.ov_freight + 
 		".TB_PREF."debtor_trans.ov_freight_tax + ".TB_PREF."debtor_trans.ov_discount)
 		- SUM( ".TB_PREF."debtor_trans.alloc) AS SumOutstanding
     	FROM ".TB_PREF."debtor_trans
